@@ -7,6 +7,8 @@ using System;
 using System.Drawing;
 using System.Windows;
 using System.Windows.Media.Imaging;
+using Emgu.CV.Structure;
+using System.Runtime.InteropServices;
 
 namespace WebCam
 {
@@ -102,21 +104,11 @@ namespace WebCam
         {
             Mat mat = new Mat(bitmap.Height, bitmap.Width, DepthType.Cv8U, 3);
             System.Drawing.Imaging.BitmapData bitmapData = bitmap.LockBits(
-                new System.Drawing.Rectangle(0, 0, bitmap.Width, bitmap.Height),
+                new Rectangle(0, 0, bitmap.Width, bitmap.Height),
                 System.Drawing.Imaging.ImageLockMode.ReadOnly,
                 System.Drawing.Imaging.PixelFormat.Format24bppRgb);
 
-            byte* src = (byte*)bitmapData.Scan0;
-            for (int y = 0; y < bitmap.Height; y++)
-            {
-                byte* dest = (byte*)mat.DataPointer + y * mat.Step;
-                for (int x = 0; x < bitmap.Width; x++)
-                {
-                    dest[x * 3] = src[x * 3 + 2]; // B
-                    dest[x * 3 + 1] = src[x * 3 + 1]; // G
-                    dest[x * 3 + 2] = src[x * 3]; // R
-                }
-            }
+            CvInvoke.CvtColor(new Mat(bitmapData.Height, bitmapData.Width, DepthType.Cv8U, 3, bitmapData.Scan0, bitmapData.Stride), mat, ColorConversion.Bgr2Rgb);
 
             bitmap.UnlockBits(bitmapData);
             return mat;
@@ -150,7 +142,7 @@ namespace WebCam
                 SaveFileDialog saveFileDialog = new SaveFileDialog
                 {
                     Filter = "AVI Files (*.avi)|*.avi|MP4 Files (*.mp4)|*.mp4",
-                    InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyVideos)
+                    InitialDirectory = "E:\\"
                 };
 
                 if (saveFileDialog.ShowDialog() == true)
