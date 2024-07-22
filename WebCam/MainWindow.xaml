@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WebCam"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800" Icon="Resources/th.ico">
     <Grid>
         <ComboBox x:Name="comboBoxCameras" HorizontalAlignment="Left" VerticalAlignment="Top" Width="200" Margin="10"/>
         <Button x:Name="buttonStartCamera" Content="Start Camera" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Margin="220,10,0,0" Click="buttonStartCamera_Click"/>
